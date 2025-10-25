@@ -2,10 +2,13 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-// Load environment variables
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-dotenv.config({ path: join(__dirname, '../../.env') });
+// Load environment variables from .env file (only in development)
+// In production (Railway), environment variables are injected directly
+if (process.env.NODE_ENV !== 'production') {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  dotenv.config({ path: join(__dirname, '../../.env') });
+}
 
 // Validate required environment variables
 const requiredEnvVars = [
