@@ -125,3 +125,4 @@ Backend already has CORS configured. Just ensure `FRONTEND_URL` matches your Ver
 - **MongoDB Atlas**: Free tier (512MB storage)
 - **Total**: $0/month for small projects! 🎉
 
+
