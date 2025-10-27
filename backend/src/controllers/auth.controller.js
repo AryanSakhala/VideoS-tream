@@ -5,26 +5,22 @@ import logger from '../utils/logger.js';
 
 export const register = async (req, res) => {
   try {
-    const { email, password, name, organizationName } = req.validatedData || req.body;
+    const { email, password, name, organizationName, role } = req.validatedData || req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ error: 'User with this email already exists' });
     }
 
-    // Handle organization
     let organizationId;
-    let userRole = 'editor';
+    let userRole;
 
     if (organizationName) {
-      // Create new organization
       const slug = organizationName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-      // Check if organization slug exists
       let finalSlug = slug;
       let counter = 1;
       while (await Organization.findOne({ slug: finalSlug })) {
@@ -38,9 +34,8 @@ export const register = async (req, res) => {
       });
 
       organizationId = organization._id;
-      userRole = 'admin'; // First user in organization is admin
+      userRole = 'admin';
     } else {
-      // Find or create default organization
       let defaultOrg = await Organization.findOne({ slug: 'default' });
       if (!defaultOrg) {
         defaultOrg = await Organization.create({
@@ -49,9 +44,9 @@ export const register = async (req, res) => {
         });
       }
       organizationId = defaultOrg._id;
+      userRole = role || 'editor';
     }
 
-    // Create user
     const user = await User.create({
       email,
       password,

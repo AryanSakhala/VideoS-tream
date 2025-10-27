@@ -9,7 +9,8 @@ export default function Register() {
     name: '',
     email: '',
     password: '',
-    organizationName: ''
+    organizationName: '',
+    role: 'editor'
   });
   const [loading, setLoading] = useState(false);
 
@@ -103,9 +104,31 @@ export default function Register() {
                 onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
               />
               <p className="mt-1 text-xs text-gray-500">
-                Leave empty to join the default organisation
+                {formData.organizationName 
+                  ? "You'll become the admin of this new organisation" 
+                  : "Leave empty to join the default organisation"}
               </p>
             </div>
+
+            {!formData.organizationName && (
+              <div>
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                  Select Your Role
+                </label>
+                <select
+                  id="role"
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                >
+                  <option value="editor">Editor - Upload and manage videos</option>
+                  <option value="viewer">Viewer - Read-only access to assigned videos</option>
+                </select>
+                <p className="mt-1 text-xs text-gray-500">
+                  Select your access level. Admins can change this later.
+                </p>
+              </div>
+            )}
           </div>
 
           <div>

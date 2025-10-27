@@ -45,7 +45,10 @@ export const schemas = {
       'string.max': 'Name cannot exceed 50 characters',
       'any.required': 'Name is required'
     }),
-    organizationName: Joi.string().min(2).max(100).optional()
+    organizationName: Joi.string().min(2).max(100).optional(),
+    role: Joi.string().valid('viewer', 'editor').optional().messages({
+      'any.only': 'Role must be either viewer or editor'
+    })
   }),
 
   login: Joi.object({

@@ -2,12 +2,22 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
+// Debug: Log environment info
+console.log('🔍 Environment Debug:');
+console.log('   NODE_ENV:', process.env.NODE_ENV);
+console.log('   Available env vars:', Object.keys(process.env).filter(key => 
+  key.includes('MONGODB') || key.includes('JWT') || key.includes('REDIS')
+).join(', '));
+
 // Load environment variables from .env file (only in development)
 // In production (Railway), environment variables are injected directly
 if (process.env.NODE_ENV !== 'production') {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   dotenv.config({ path: join(__dirname, '../../.env') });
+  console.log('   Loaded .env file');
+} else {
+  console.log('   Skipping .env file (production mode)');
 }
 
 // Validate required environment variables
